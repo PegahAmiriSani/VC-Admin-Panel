@@ -11,7 +11,6 @@ const Login = ({ isLogin, setIsLogin }) => {
   const [info, setInfo] = useState({ keyId: "", mobile: "" });
 
   const onSubmitTakeNumber = async (mobile) => {
-    // e.preventDefault();
     setStep(2);
 
     try {
@@ -33,36 +32,36 @@ const Login = ({ isLogin, setIsLogin }) => {
       const keyId = resHandshake.data.result.keyId;
 
       const resAuth = await instance.post(
-        "",
+        "/api/v1/oauth2/otp/authorize",
         {},
         {
           params: {
-            keyId: { keyId },
+            keyId: keyId,
             identity: "09352320775",
           },
         }
       );
-      console.log(">>>>", resAuth.data);
-      console.log("resid be auth");
+      console.log(">>>>", resAuth.data.result.identity);
+      console.log("auth");
 
       setStep(2);
     } catch {
-      // ..
+      //error handling
     }
 
-    // setInfo({ keyId, mobile });
+    setInfo({ keyId, identity });
     setStep(2);
   };
 
-  const onSubmitFormComponent2 = async (otpCode) => {
+  const onSubmitTakeCode = async (otpCode) => {
     try {
       const resVerify = await instance.post(
         "/api/v1/oauth2/otp/verify",
         {},
         {
           params: {
-            keyId: { keyId },
-            identity: "09352320775",
+            keyId: info.keyId,
+            identity: info.identity,
             otp: otpCode,
           },
         }
@@ -75,9 +74,14 @@ const Login = ({ isLogin, setIsLogin }) => {
   };
 
   return (
-    <Box>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      width="100%"
+      height="100%">
       {step === 2 ? (
-        <TakeCode onSubmitForm={onSubmitFormComponent2} />
+        <TakeCode onSubmitForm={onSubmitTakeCode} />
       ) : (
         <TakeNumber onSubmitForm={onSubmitTakeNumber} />
       )}

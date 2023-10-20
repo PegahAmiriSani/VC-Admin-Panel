@@ -34,7 +34,7 @@ function App() {
               />
             </Routes>
           ) : (
-            <div>
+            <>
               <Sidebar />
               <main className="content">
                 <Topbar />
@@ -52,7 +52,7 @@ function App() {
                   {/* <Route path="/calendar" element={<Calendar />} /> */}
                 </Routes>
               </main>
-            </div>
+            </>
           )}
         </div>
       </ThemeProvider>

@@ -11,7 +11,7 @@ const TakeNumber = (props) => {
   const { register } = useForm();
 
   return (
-    <Box margin="10px" width="40%">
+    <Box margin="10px" width="30%">
       <form
         noValidate
         autoComplete="off"
@@ -40,13 +40,6 @@ const TakeNumber = (props) => {
             // error={!!errorMessage}
           />
         </Box>
-        {/* <Box mb={4} textAlign="center">
-          <Typography variant="body2" component="label">
-            با ورود به برنامه تمامی
-            <b> شرایط و قوانین استفاده و سیاست حفظ حریم </b>
-            خصوصی کاربران برنامه را می پذیرم
-          </Typography>
-        </Box> */}
         <Button
           variant="contained"
           color="primary"

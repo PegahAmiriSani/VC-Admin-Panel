@@ -29,7 +29,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       }}
       onClick={() => setSelected(title)}
       icon={icon}>
-      <Typography>{title}</Typography>
+      <Typography style={{ textAlign: "right" }}>{title}</Typography>
       <Link to={to} />
     </MenuItem>
   );
@@ -127,7 +127,7 @@ const Sidebar = () => {
             <Typography
               variant="h6"
               color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}>
+              sx={{ m: "15px 0 5px 20px", textAlign: "right", pr: "30px" }}>
               داده‌ها
             </Typography>
             <Item
@@ -155,7 +155,7 @@ const Sidebar = () => {
             <Typography
               variant="h6"
               color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}>
+              sx={{ m: "15px 0 5px 20px", textAlign: "right", pr: "30px" }}>
               صفحه‌ها
             </Typography>
             <Item
@@ -183,7 +183,7 @@ const Sidebar = () => {
             <Typography
               variant="h6"
               color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}>
+              sx={{ m: "15px 0 5px 20px", textAlign: "right", pr: "30px" }}>
               چارت‌ها
             </Typography>
             <Item
@@ -210,13 +210,6 @@ const Sidebar = () => {
             <Item
               title="نمودار جغرافیایی"
               to="/geography"
-              icon={<MapOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="لاگین تست"
-              to="/login"
               icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

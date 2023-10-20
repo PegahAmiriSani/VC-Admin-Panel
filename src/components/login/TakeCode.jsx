@@ -52,7 +52,7 @@ const TakeCode = (info) => {
     }
   };
   return (
-    <Box margin="10px" width="40%">
+    <Box margin="10px" width="30%">
       <form
         noValidate
         autoComplete="off"
