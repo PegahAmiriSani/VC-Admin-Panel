@@ -19,29 +19,41 @@ import Login from "./components/login/Index.jsx";
 
 function App() {
   const [theme, colorMode] = useMode();
+  const [isLogin, setIsLogin] = useState(false);
+
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div dir="rtl" className="app">
-          <Sidebar />
-          <main className="content">
-            <Topbar />
+        <div className="app">
+          {isLogin === false ? (
             <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/invoices" element={<Invoices />} />
-              {/* <Route path="/form" element={<Form />} /> */}
-              {/* <Route path="/bar" element={<Bar />} /> */}
-              {/* <Route path="/pie" element={<Pie />} /> */}
-              {/* <Route path="/line" element={<Line />} /> */}
-              {/* <Route path="/faq" element={<FAQ />} /> */}
-              {/* <Route path="/geography" element={<Geography />} /> */}
-              {/* <Route path="/calendar" element={<Calendar />} /> */}
+              <Route
+                path="/login"
+                element={<Login isLogin={isLogin} setIsLogin={setIsLogin} />}
+              />
             </Routes>
-          </main>
+          ) : (
+            <div>
+              <Sidebar />
+              <main className="content">
+                <Topbar />
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/contacts" element={<Contacts />} />
+                  <Route path="/invoices" element={<Invoices />} />
+                  {/* <Route path="/form" element={<Form />} /> */}
+                  {/* <Route path="/bar" element={<Bar />} /> */}
+                  {/* <Route path="/pie" element={<Pie />} /> */}
+                  {/* <Route path="/line" element={<Line />} /> */}
+                  {/* <Route path="/faq" element={<FAQ />} /> */}
+                  {/* <Route path="/geography" element={<Geography />} /> */}
+                  {/* <Route path="/calendar" element={<Calendar />} /> */}
+                </Routes>
+              </main>
+            </div>
+          )}
         </div>
       </ThemeProvider>
     </ColorModeContext.Provider>

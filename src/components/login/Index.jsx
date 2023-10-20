@@ -1,17 +1,17 @@
 import React from "react";
-// import Component2 from "./Component2";
-import Component1 from "./TakeNumber";
 import instance from "../../axios.config";
 import { useState } from "react";
 import TakeNumber from "./TakeNumber";
 import TakeCode from "./TakeCode";
-const Login = () => {
-  const [step, setStep] = useState(1);
-  const [state, setState] = useState({ keyId: "", mobile: "" });
+import { Box } from "@mui/material";
 
-  const onSubmitFormComponent1 = async (mobile) => {
+//vorodi component ha hamishe obj e
+const Login = ({ isLogin, setIsLogin }) => {
+  const [step, setStep] = useState(1);
+  const [info, setInfo] = useState({ keyId: "", mobile: "" });
+
+  const onSubmitTakeNumber = async (mobile) => {
     // e.preventDefault();
-    console.log(step, "step===============");
     setStep(2);
 
     try {
@@ -28,18 +28,29 @@ const Login = () => {
           },
         }
       );
-      console.log(">>>>", resHandshake.data);
 
-      //   const resAuth = await instance.post("", {}, { params: {} });
-      //   console.log(">>>>", resAuth.data);
-      console.log("4444444");
+      console.log(">>>>", resHandshake.data.result.keyId);
+      const keyId = resHandshake.data.result.keyId;
+
+      const resAuth = await instance.post(
+        "",
+        {},
+        {
+          params: {
+            keyId: { keyId },
+            identity: "09352320775",
+          },
+        }
+      );
+      console.log(">>>>", resAuth.data);
+      console.log("resid be auth");
 
       setStep(2);
     } catch {
       // ..
     }
 
-    setState({ keyId, mobile });
+    // setInfo({ keyId, mobile });
     setStep(2);
   };
 
@@ -50,8 +61,8 @@ const Login = () => {
         {},
         {
           params: {
-            keyId: "deviceUID ",
-            identity: "name",
+            keyId: { keyId },
+            identity: "09352320775",
             otp: otpCode,
           },
         }
@@ -64,13 +75,13 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <Box>
       {step === 2 ? (
         <TakeCode onSubmitForm={onSubmitFormComponent2} />
       ) : (
-        <TakeNumber onSubmitForm={onSubmitFormComponent1} />
+        <TakeNumber onSubmitForm={onSubmitTakeNumber} />
       )}
-    </div>
+    </Box>
   );
 };
 

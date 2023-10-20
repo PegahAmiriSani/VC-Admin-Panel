@@ -28,13 +28,6 @@ const TakeCode = (info) => {
     if (event) {
       event.preventDefault();
     }
-
-    useVerifyHook.mutate({
-      otp: code.join(""),
-      callBack: () => {
-        history.replace("/");
-      },
-    });
   };
 
   const onEndCounter = () => {
