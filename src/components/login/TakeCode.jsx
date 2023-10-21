@@ -2,13 +2,10 @@ import React from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { useState } from "react";
 
-const TakeCode = (info) => {
-  //   const { info } = props;
-
+const TakeCode = ({ code, setCode, onSubmitForm }) => {
   const [focus, setFocus] = useState(0);
-
-  const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [time, setTime] = useState(null);
+  // const [code, setCode] = useState(["", "", "", "", "", ""]);
 
   const nextFocuse = (event, index) => {
     const value = event.target.value;
@@ -51,13 +48,18 @@ const TakeCode = (info) => {
       setCode([...code]);
     }
   };
+
   return (
     <Box margin="10px" width="30%">
       <form
         noValidate
         autoComplete="off"
         //   className={classes.Form}
-        onSubmit={(e) => props.onSubmitForm(e)}>
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmitForm();
+          console.log("onsubmit");
+        }}>
         <Box marginBottom="40px">
           <Typography variant="h6" component="h6" className="title">
             <b>کد به شماره </b>
