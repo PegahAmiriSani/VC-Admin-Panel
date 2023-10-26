@@ -1,17 +1,51 @@
 import React from "react";
 import instance from "../../axios.config";
-import { useState } from "react";
-import TakeNumber from "./TakeNumber";
-import TakeCode from "./TakeCode";
+import { useRef, useState } from "react";
+import TakeNumber from "./components/TakeNumber";
+import TakeCode from "./components/TakeCode";
+import { useStyles } from "./Style";
 import { Box, Typography } from "@mui/material";
+import {
+  isTablet,
+  osName,
+  osVersion,
+  isMobile,
+  isSmartTV,
+  isConsole,
+  getUA,
+} from "react-device-detect";
+import { v4 as uuidv4 } from "uuid";
 
 const Login = ({ isLogin, setIsLogin }) => {
+  const classes = useStyles();
+
   const [step, setStep] = useState(1);
   const [info, setInfo] = useState({ keyId: "", identity: "" });
   const [code, setCode] = useState(["", "", "", "", "", ""]);
 
   const onSubmitTakeNumber = async (mobile) => {
-    setStep(2);
+    console.log("HERE:", mobile);
+    setInfo((prevStete) => ({ ...prevStete, identity: mobile }));
+
+    // const number = numberRef.current?.value;
+    // console.log(number);
+    if (!mobile || mobile.trim() === "") {
+      console.log("تلفن همراه را وارد نمایید");
+      return;
+    } else if (
+      isNaN(parseInt(mobile)) ||
+      mobile.length !== 11 ||
+      !mobile.startsWith("09")
+    ) {
+      console.log("لطفا شماره همراه صحیح وارد کنید");
+      return;
+    }
+
+    let deviceUID = localStorage.getItem("VC:UID");
+    if (!deviceUID) {
+      deviceUID = uuidv4();
+      localStorage.setItem("VC:UID", deviceUID);
+    }
 
     try {
       const resHandshake = await instance.post(
@@ -19,42 +53,45 @@ const Login = ({ isLogin, setIsLogin }) => {
         {},
         {
           params: {
-            deviceUID: "uid",
-            deviceName: "name",
-            deviceOs: "os",
-            deviceOsVersion: "0",
-            deviceType: "MOBILE_PHONE",
+            deviceUID: deviceUID,
+            deviceName: getUA,
+            deviceOs: osName,
+            deviceOsVersion: osVersion,
+            deviceType: isMobile
+              ? "MOBILE_PHONE"
+              : isTablet
+              ? "TABLET"
+              : isSmartTV
+              ? "TV_DEVICE"
+              : isConsole
+              ? "CONSOLE"
+              : "DESKTOP",
           },
         }
       );
 
-      // console.log(">>>>", resHandshake.data.result.keyId);
       const keyId = resHandshake.data.result.keyId;
-      console.log("keyId is " + keyId);
+      console.log("Handshake done!");
 
       const resAuth = await instance.post(
         "/api/v1/oauth2/otp/authorize",
         {},
         {
           params: {
-            identity: "09352320775",
+            identity: mobile,
           },
           headers: {
             keyId: keyId,
           },
         }
       );
-      console.log(">>>>", resAuth.data.result.identity);
+      console.log("Authorize done!");
 
       setStep(2);
-      // setInfo({ ...info, keyId: keyId });
-      setInfo({ keyId: keyId, identity: "09352320775" });
-    } catch {
-      //error handling
+      setInfo({ keyId: keyId, identity: mobile });
+    } catch (err) {
+      console.log(err);
     }
-
-    // setInfo({ keyId, identity });
-    setStep(2);
   };
 
   const onSubmitTakeCode = async () => {
@@ -72,8 +109,7 @@ const Login = ({ isLogin, setIsLogin }) => {
           },
         }
       );
-      console.log("verify done");
-      console.log(resVerify.data);
+      console.log("Verify done!");
       // ... redirect to panel
       if (resVerify.data.status === 200) {
         setIsLogin(true);

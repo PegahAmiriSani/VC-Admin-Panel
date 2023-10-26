@@ -5,7 +5,6 @@ import { useState } from "react";
 const TakeCode = ({ code, setCode, onSubmitForm }) => {
   const [focus, setFocus] = useState(0);
   const [time, setTime] = useState(null);
-  // const [code, setCode] = useState(["", "", "", "", "", ""]);
 
   const nextFocuse = (event, index) => {
     const value = event.target.value;

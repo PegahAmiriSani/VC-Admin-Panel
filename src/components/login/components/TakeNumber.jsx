@@ -1,14 +1,27 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { tokens } from "../../theme";
+import { tokens } from "../../../theme";
 import { useTheme } from "@mui/material";
 import { Box, Typography, TextField, Button } from "@mui/material";
 
-const TakeNumber = (props) => {
+const TakeNumber = ({ onSubmitForm }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { onSubmitForm } = props;
-  const { register } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = handleSubmit((values) => {
+    console.log(">>>>", values);
+
+    // setError("mobile", { type: "", message: "alighooli9" });
+    // return;
+
+    onSubmitForm(values.mobile);
+  });
 
   return (
     <Box margin="10px" width="30%">
@@ -16,9 +29,9 @@ const TakeNumber = (props) => {
         noValidate
         autoComplete="off"
         // className={classes.Form}
-        onSubmit={props.onSubmitForm}>
+        onSubmit={onSubmit}>
         <Box marginBottom="40px">
-          <Typography variant="h6" component="h6" className="title">
+          <Typography variant="h5" component="h6" className="title">
             <b>لطفا شماره همراه خود را وارد کنید</b>
           </Typography>
           {/* {errorMessage && <Alert severity="error">{errorMessage}</Alert>} */}
@@ -30,19 +43,26 @@ const TakeNumber = (props) => {
         </Box>
         <Box mb={3}>
           <TextField
+            sx={{
+              "&:hover": {
+                borderColor: colors.greenAccent[600],
+              },
+            }}
             variant="outlined"
             placeholder="...09"
             fullWidth
+            error={Boolean(errors?.mobile)}
             inputProps={{ style: { textAlign: "left" } }}
-            // inputRef={numberRef}
-            type="number"
+            {...register("mobile")}
             autoFocus={true}
-            // error={!!errorMessage}
           />
+          {errors?.mobile?.message}
         </Box>
         <Button
+          sx={{
+            background: colors.greenAccent[600],
+          }}
           variant="contained"
-          color="primary"
           type="submit"
           fullWidth
           disabled={false}>
